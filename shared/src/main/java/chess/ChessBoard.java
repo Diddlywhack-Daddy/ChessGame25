@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Arrays;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -8,8 +10,9 @@ package chess;
  */
 public class ChessBoard {
 
+    private ChessPiece [][] board;
     public ChessBoard() {
-        
+        resetBoard();
     }
 
     /**
@@ -18,8 +21,9 @@ public class ChessBoard {
      * @param position where to add the piece to
      * @param piece    the piece to add
      */
-    public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+    public void addPiece(ChessPosition position, ChessPiece piece)
+    {
+        board[position.getRow()-1][position.getColumn()-1] = piece;
     }
 
     /**
@@ -30,7 +34,10 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        int row = position.getRow()-1;
+        //-1 is to account for zero indexed arrays
+        int col = position.getColumn()-1;
+        return board[row][col];
     }
 
     /**
@@ -38,6 +45,66 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        board = new ChessPiece[8][8];
+        addPawns();
+        addBackRank(ChessGame.TeamColor.WHITE);
+        addBackRank(ChessGame.TeamColor.BLACK);
+
+
+    }
+    // A helper function for resetBoard, this adds the back rank of a particular color to the board.
+    private void addBackRank(ChessGame.TeamColor color){
+        int row;
+        if(color == ChessGame.TeamColor.WHITE){row = 1;}
+        else{row = 8;}
+
+        //Adds Rooks
+        addPiece(new ChessPosition(row,1),new ChessPiece(color, ChessPiece.PieceType.ROOK));
+        addPiece(new ChessPosition(row,8),new ChessPiece(color, ChessPiece.PieceType.ROOK));
+
+        //Adds knights
+        addPiece(new ChessPosition(row,2),new ChessPiece(color, ChessPiece.PieceType.KNIGHT));
+        addPiece(new ChessPosition(row,7),new ChessPiece(color, ChessPiece.PieceType.KNIGHT));
+
+        //Adds bishops
+        addPiece(new ChessPosition(row,3),new ChessPiece(color, ChessPiece.PieceType.BISHOP));
+        addPiece(new ChessPosition(row,6),new ChessPiece(color, ChessPiece.PieceType.BISHOP));
+
+        //adds Royalty
+        addPiece(new ChessPosition(row,4),new ChessPiece(color, ChessPiece.PieceType.QUEEN));
+        addPiece(new ChessPosition(row,5),new ChessPiece(color, ChessPiece.PieceType.KING));
+
+    }
+
+    // Another helper function for resetBoard that adds all pawns of both colors to the board.
+    private void addPawns(){
+        for(int col=1; col<9; col++) {
+            addPiece(new ChessPosition(2, col), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN));
+            addPiece(new ChessPosition(7, col), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessBoard that = (ChessBoard) o;
+        return Arrays.deepEquals(board, that.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(board);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessBoard{" +
+                "board=" + Arrays.toString(board) +
+                '}';
     }
 }
