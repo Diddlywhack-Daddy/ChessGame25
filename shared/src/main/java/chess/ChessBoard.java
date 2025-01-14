@@ -23,7 +23,7 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece)
     {
-        board[8-position.getRow()][position.getColumn()-1] = piece;
+        board[position.getRow()-1][position.getColumn()-1] = piece;
     }
 
     /**
@@ -35,7 +35,7 @@ public class ChessBoard {
      */
     public ChessPiece getPiece(ChessPosition position) {
         //modifiers are to account for zero indexing and counting row upwards instead of downwards
-        return board[8-position.getRow()][position.getColumn()-1];
+        return board[position.getRow()-1][position.getColumn()-1];
 
     }
 
@@ -103,7 +103,7 @@ public class ChessBoard {
     @Override
     public String toString() {
         return "ChessBoard{" +
-                "board=" + Arrays.toString(board) +
+                "board=" + Arrays.deepToString(board) +
                 '}';
     }
 }
