@@ -70,55 +70,87 @@ public class ChessPiece {
         ChessGame.TeamColor myColor = board.getPiece(myPosition).color;
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
+        int count = 1;
+        boolean forward = true;
+        boolean backward = true;
+        boolean left = true;
+        boolean right = true;
 
-        //checks forward
-        for (int r = currentRow + 1; r < 9; r++) {
-            ChessPosition newPosition = new ChessPosition(r, currentCol);
-            if (board.getPiece(newPosition) == null) {
-                rookMoves.add(new ChessMove(myPosition, newPosition, null));
-            } else if (board.getPiece(newPosition).color == myColor) {
-                break;
-            } else if (board.getPiece(newPosition).color != myColor) {
-                rookMoves.add(new ChessMove(myPosition, newPosition, null));
-                break;
+        while (count <=7) {
+
+            //checks count squares forward
+            if (currentRow + count <= 8) {
+                if (forward) {
+                    ChessPosition Forward = new ChessPosition(currentRow + count, currentCol);
+                    if (board.getPiece(Forward) == null) {
+                        rookMoves.add(new ChessMove(myPosition, Forward, null));
+                    } else if (board.getPiece(Forward).getTeamColor() != myColor) {
+                        rookMoves.add(new ChessMove(myPosition, Forward, null));
+                        forward = false;
+                    } else {
+                        forward = false;
+                    }
+                }
             }
-        }
-        //checks backward
-        for (int r = currentRow - 1; r > 0; r--) {
-            ChessPosition newPosition = new ChessPosition(r, currentCol);
-            if (board.getPiece(newPosition) == null) {
-                rookMoves.add(new ChessMove(myPosition, newPosition, null));
-            } else if (board.getPiece(newPosition).color == myColor) {
-                break;
-            } else if (board.getPiece(newPosition).color != myColor) {
-                rookMoves.add(new ChessMove(myPosition, newPosition, null));
-                break;
+            else {forward = false;}
+
+            //checks count squares backward
+
+            if (currentRow - count >= 1) {
+                if (backward) {
+                    ChessPosition Backward = new ChessPosition(currentRow - count, currentCol);
+                    if (board.getPiece(Backward) == null) {
+                        rookMoves.add(new ChessMove(myPosition, Backward, null));
+                    } else if (board.getPiece(Backward).getTeamColor() != myColor) {
+                        rookMoves.add(new ChessMove(myPosition, Backward, null));
+                        backward = false;
+                    } else {
+                        backward = false;
+                    }
+                }
             }
-        }
-        //checks right
-        for (int c = currentCol + 1; c < 9; c++) {
-            ChessPosition newPosition = new ChessPosition(currentRow, c);
-            if (board.getPiece(newPosition) == null) {
-                rookMoves.add(new ChessMove(myPosition, newPosition, null));
-            } else if (board.getPiece(newPosition).color == myColor) {
-                break;
-            } else if (board.getPiece(newPosition).color != myColor) {
-                rookMoves.add(new ChessMove(myPosition, newPosition, null));
-                break;
+            else{backward = false;}
+
+            //checks count squares to the right
+
+            if (currentCol + count <= 8) {
+                if (right) {
+                    ChessPosition Right = new ChessPosition(currentRow, currentCol+count);
+                    if (board.getPiece(Right) == null) {
+                        rookMoves.add(new ChessMove(myPosition, Right, null));
+                    } else if (board.getPiece(Right).getTeamColor() != myColor) {
+                        rookMoves.add(new ChessMove(myPosition, Right, null));
+                        right = false;
+                    } else {
+                        right = false;
+                    }
+                }
             }
-        }
-        //checks left
-        for (int c = currentCol - 1; c > 0; c--) {
-            ChessPosition newPosition = new ChessPosition(currentRow, c);
-            if (board.getPiece(newPosition) == null) {
-                rookMoves.add(new ChessMove(myPosition, newPosition, null));
-            } else if (board.getPiece(newPosition).color == myColor) {
-                break;
-            } else if (board.getPiece(newPosition).color != myColor) {
-                rookMoves.add(new ChessMove(myPosition, newPosition, null));
-                break;
+            else{right = false;}
+
+            //checks count squares to the left
+
+            if (currentCol - count >= 1) {
+                if (left) {
+                    ChessPosition Left = new ChessPosition(currentRow, currentCol - count);
+                    if (board.getPiece(Left) == null) {
+                        rookMoves.add(new ChessMove(myPosition, Left, null));
+                    } else if (board.getPiece(Left).getTeamColor() != myColor) {
+                        rookMoves.add(new ChessMove(myPosition, Left, null));
+                        left = false;
+                    } else {
+                        left = false;
+                    }
+                }
             }
+
+
+            count ++;
+
         }
+
+
+
         return rookMoves;
     }
 
