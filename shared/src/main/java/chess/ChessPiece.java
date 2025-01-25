@@ -222,84 +222,62 @@ public class ChessPiece {
     }
 
     private Collection<ChessMove> getBishopMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<chess.ChessMove> bishopMoves = new ArrayList<>();
-        ChessGame.TeamColor myColor = board.getPiece(myPosition).color;
+        Collection<ChessMove> bishopMoves = new ArrayList<>();
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
+        ChessGame.TeamColor myColor = board.getPiece(myPosition).getTeamColor();
+
         int count = 1;
-        boolean northwest = true;
-        boolean northeast = true;
-        boolean southwest = true;
-        boolean southeast = true;
 
-        while (count <=7) {
-
-            //checks count squares northwest
-            if (currentRow + count <= 8 && currentCol -count >=1) {
-                if (northwest) {
-                    ChessPosition NorthWest = new ChessPosition(currentRow + count, currentCol-count);
-                    if (board.getPiece(NorthWest) == null) {
-                        bishopMoves.add(new ChessMove(myPosition, NorthWest, null));
-                    } else if (board.getPiece(NorthWest).getTeamColor() != myColor) {
-                        bishopMoves.add(new ChessMove(myPosition, NorthWest, null));
-                        northwest = false;
-                    } else {
-                        northwest = false;
-                    }
-                }
+        while (currentRow + count<=8 && currentCol + count<=8){
+            ChessPosition newPosition = new ChessPosition(currentRow+count, currentCol+count);
+            if(board.getPiece(newPosition) == null){
+                bishopMoves.add(new ChessMove(myPosition,newPosition,null));
             }
-            else {northwest = false;}
-
-            //checks count squares northeast
-
-            if (currentRow + count <= 8 && currentCol +count <=8) {
-                if (northeast) {
-                    ChessPosition NorthEast = new ChessPosition(currentRow + count, currentCol + count);
-                    if (board.getPiece(NorthEast) == null) {
-                        bishopMoves.add(new ChessMove(myPosition, NorthEast, null));
-                    } else if (board.getPiece(NorthEast).getTeamColor() != myColor) {
-                        bishopMoves.add(new ChessMove(myPosition, NorthEast, null));
-                        northeast = false;
-                    } else {
-                        northeast = false;
-                    }
-                }
+            else if(board.getPiece(newPosition).getTeamColor() != myColor){
+                bishopMoves.add(new ChessMove(myPosition,newPosition,null));
+                break;
             }
-            else{northeast = false;}
-
-            //checks count squares to the southwest
-
-            if (currentRow - count >= 1 && currentCol -count >=1) {
-                if (southwest) {
-                    ChessPosition SouthWest = new ChessPosition(currentRow-count, currentCol-count);
-                    if (board.getPiece(SouthWest) == null) {
-                        bishopMoves.add(new ChessMove(myPosition, SouthWest, null));
-                    } else if (board.getPiece(SouthWest).getTeamColor() != myColor) {
-                        bishopMoves.add(new ChessMove(myPosition, SouthWest, null));
-                        southwest = false;
-                    } else {
-                        southwest = false;
-                    }
-                }
+            else break;
+            count ++;
+        }
+        count =1;
+        while (currentRow + count<=8 && currentCol - count>0){
+            ChessPosition newPosition = new ChessPosition(currentRow+count, currentCol-count);
+            if(board.getPiece(newPosition) == null){
+                bishopMoves.add(new ChessMove(myPosition,newPosition,null));
             }
-            else{southwest = false;}
-
-            //checks count squares to the southeast
-
-            if (currentRow - count >=1 && currentCol +count <=8) {
-                if (southeast) {
-                    ChessPosition SouthEast = new ChessPosition(currentRow, currentCol - count);
-                    if (board.getPiece(SouthEast) == null) {
-                        bishopMoves.add(new ChessMove(myPosition, SouthEast, null));
-                    } else if (board.getPiece(SouthEast).getTeamColor() != myColor) {
-                        bishopMoves.add(new ChessMove(myPosition, SouthEast, null));
-                        southeast = false;
-                    } else {
-                        southeast = false;
-                    }
-                }
+            else if(board.getPiece(newPosition).getTeamColor() != myColor){
+                bishopMoves.add(new ChessMove(myPosition,newPosition,null));
+                break;
             }
-            else{southeast = false;}
+            else break;
+            count ++;
+        }
+        count =1;
+        while (currentRow - count>0 && currentCol + count<=8){
+            ChessPosition newPosition = new ChessPosition(currentRow-count, currentCol+count);
+            if(board.getPiece(newPosition) == null){
+                bishopMoves.add(new ChessMove(myPosition,newPosition,null));
+            }
+            else if(board.getPiece(newPosition).getTeamColor() != myColor){
+                bishopMoves.add(new ChessMove(myPosition,newPosition,null));
+                break;
+            }
+            else break;
+            count ++;
+        }
+        count = 1;
+        while (currentRow - count>0 && currentCol - count>0){
+            ChessPosition newPosition = new ChessPosition(currentRow-count, currentCol-count);
+            if(board.getPiece(newPosition) == null){
+                bishopMoves.add(new ChessMove(myPosition,newPosition,null));
+            }
+            else if(board.getPiece(newPosition).getTeamColor() != myColor){
+                bishopMoves.add(new ChessMove(myPosition,newPosition,null));
+                break;
+            }
+            else break;
             count ++;
         }
         return bishopMoves;
@@ -307,7 +285,8 @@ public class ChessPiece {
 
     private Collection<ChessMove> getQueenMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<chess.ChessMove> queenMoves = new ArrayList<>();
-
+        queenMoves.addAll(getRookMoves(board,myPosition));
+        queenMoves.addAll(getBishopMoves(board,myPosition));
         return queenMoves;
     }
 
