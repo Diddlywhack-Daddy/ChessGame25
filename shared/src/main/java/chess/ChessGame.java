@@ -145,7 +145,24 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessGame.TeamColor otherColor;
+        if (teamColor == TeamColor.WHITE) {
+            otherColor = TeamColor.BLACK;
+        } else {
+            otherColor = TeamColor.WHITE;
+        }
+
+        Collection<ChessMove> otherMoves = possibleMoves(otherColor);
+
+        for (ChessMove move : otherMoves) {
+            ChessPiece piece = board.getPiece(move.getEndPosition());
+            if (board.getPiece(move.getEndPosition()) != null &&
+                    board.getPiece(move.getEndPosition()).getPieceType() == ChessPiece.PieceType.KING &&
+                    board.getPiece(move.getEndPosition()).getTeamColor() == teamColor) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
