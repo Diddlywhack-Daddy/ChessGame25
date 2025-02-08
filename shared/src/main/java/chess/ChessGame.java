@@ -185,7 +185,21 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (isInCheck(teamColor)) {
+            return false;
+        }
+
+        Collection<ChessMove> possibleMoves = possibleMoves(teamColor);
+        Collection<ChessMove> validMoves = possibleMoves(teamColor);
+        //makes a two collections so I can use 1 for the for loop and the other for the return without getting
+        // a concurrent modification exception
+
+        for (ChessMove move : possibleMoves) {
+            if (movePutsInCheck(teamColor, move)) {
+                validMoves.remove(move);
+            }
+        }
+        return validMoves.isEmpty();
     }
 
     /**
