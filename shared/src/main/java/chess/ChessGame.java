@@ -202,6 +202,21 @@ public class ChessGame {
         return validMoves.isEmpty();
     }
 
+    private boolean movePutsInCheck(TeamColor teamColor, ChessMove move) {
+        ChessPiece destPiece = board.getPiece(move.getEndPosition());
+        unsafeMove(move);
+        ChessMove undo = new ChessMove(move.getEndPosition(), move.getStartPosition(), move.getPromotionPiece());
+        if (isInCheck(teamColor)) {
+            unsafeMove(undo);
+            board.addPiece(move.getEndPosition(), destPiece);
+            return true;
+        } else {
+            unsafeMove(undo);
+            board.addPiece(move.getEndPosition(), destPiece);
+            return false;
+        }
+    }
+
     /**
      * Sets this game's chessboard with a given board
      *
@@ -218,21 +233,6 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return this.board;
-    }
-
-    private boolean movePutsInCheck(TeamColor teamColor, ChessMove move) {
-        ChessPiece destPiece = board.getPiece(move.getEndPosition());
-        unsafeMove(move);
-        ChessMove undo = new ChessMove(move.getEndPosition(), move.getStartPosition(), move.getPromotionPiece());
-        if (isInCheck(teamColor)) {
-            unsafeMove(undo);
-            board.addPiece(move.getEndPosition(), destPiece);
-            return true;
-        } else {
-            unsafeMove(undo);
-            board.addPiece(move.getEndPosition(), destPiece);
-            return false;
-        }
     }
 
     @Override
